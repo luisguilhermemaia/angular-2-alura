@@ -15,7 +15,6 @@ import { Component, Input } from '@angular/core';
         </div>
     </div>
     `,
-
 })
 export class PainelComponent {
     @Input() titulo: string;

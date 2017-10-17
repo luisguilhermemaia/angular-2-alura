@@ -9,10 +9,11 @@ import { PainelModule } from './painel/painel.module';
 import 'rxjs/add/operator/map';
 import { ListagemComponent } from './listagem/listagem.component';
 import { CadastroComponent } from './cadastro/cadastro.component';
-
+import {routing} from './app.routes';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [BrowserModule, HttpModule, PhotoModule, PainelModule],
+  imports: [BrowserModule, HttpModule, PhotoModule, PainelModule, routing, FormsModule],
   declarations: [AppComponent, CadastroComponent, ListagemComponent],
   bootstrap: [AppComponent]
 })

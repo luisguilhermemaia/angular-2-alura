@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import { PhotoService } from "../photo/photo.service";
 import { Photo } from "../photo/photo";
 
 @Component({
-    selector: 'listagem',
-    template: `
+  moduleId: module.id,
+  selector: "listagem",
+  template: `
     <div class="jumbotron">
         <h1 class="text-center">
             Alurapic
@@ -12,19 +13,32 @@ import { Photo } from "../photo/photo";
     </div>
     <div class="container">
         <div class="row">
-            <painel *ngFor="let photo of photos" titulo="{{photo.titulo}}" class="col-md-2">
-                <photo url="{{photo.url}}" title="{{photo.titulo}}"></photo>
+            <div class="col-md-12">
+                <form>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <a [routerLink]="['/cadastro']" class="btn btn-primary"> Nova foto</a>
+                        </span>
+                        <input class="form-control" #textoProcurado (keyup)="0" placeholder="filtrar pelo titulo da foto">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <painel *ngFor="let photo of photos | filtroPorTitulo: textoProcurado.value" titulo="{{photo.titulo | uppercase}}" class="col-md-2">
+                <photo url="{{photo.url}}" titulo="{{photo.titulo}}"></photo>
             </painel>
         </div>
     </div>
     `
 })
-export class ListagemComponent implements OnInit{
-    photos: Photo[] = [];
-    
-      constructor(private photoService: PhotoService) {}
-    
-      ngOnInit(): void {
-        this.photoService.getPhotos().subscribe(data => this.photos = data);
-      }
+export class ListagemComponent implements OnInit {
+  photos: Photo[] = [];
+
+  constructor(private photoService: PhotoService) {}
+
+  ngOnInit(): void {
+    this.photoService.getPhotos().subscribe(data => (this.photos = data));
+  }
 }
