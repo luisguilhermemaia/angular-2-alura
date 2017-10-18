@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Rx";
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers } from "@angular/http";
 
@@ -10,19 +11,29 @@ export class PhotoService {
 
   constructor(private http: Http) {}
 
-  getPhotos() {
+  getPhotos(): Observable<Photo[]> {
     return this.http.get(this.url).map((res: Response) => res.json());
   }
 
-  getPhoto(id: number) {
+  getPhoto(id: number): Observable<Photo> {
     const url = `${this.url}/${id}`;
 
     return this.http.get(url).map((res: Response) => res.json());
   }
 
-  create(photo: Photo) {
+  create(photo: Photo): Observable<Response> {
     return this.http
       .post(this.url, photo, { headers: this.headers })
       .map((res: Response) => res.json());
+  }
+
+  update(photo: Photo): Observable<Response> {
+    const url = `${this.url}/${photo._id}`;
+    return this.http.put(url, photo, {headers: this.headers}).map((res: Response) => res.json());
+  }
+
+  delete(id: string): Observable<Response> {
+    const url = `${this.url}/${id}`;
+    return this.http.delete(url);
   }
 }

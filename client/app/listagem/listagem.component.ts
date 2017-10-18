@@ -20,6 +20,7 @@ import { Photo } from "../photo/photo";
                             <a [routerLink]="['/cadastro']" class="btn btn-primary"> Nova foto</a>
                         </span>
                         <input class="form-control" #textoProcurado (keyup)="0" placeholder="filtrar pelo titulo da foto">
+                        
                     </div>
                 </form>
             </div>
@@ -28,6 +29,7 @@ import { Photo } from "../photo/photo";
         <div class="row">
             <painel *ngFor="let photo of photos | filtroPorTitulo: textoProcurado.value" titulo="{{photo.titulo | uppercase}}" class="col-md-2">
                 <photo url="{{photo.url}}" titulo="{{photo.titulo}}"></photo>
+                <button class="btn btn-danger btn-block" (click)="remove(photo)">Remover</button>
             </painel>
         </div>
     </div>
@@ -40,5 +42,14 @@ export class ListagemComponent implements OnInit {
 
   ngOnInit(): void {
     this.photoService.getPhotos().subscribe(data => (this.photos = data));
+  }
+
+  remove(photo: Photo) {
+    this.photoService.delete(photo._id).subscribe(() => {
+      let novasFotos = this.photos.slice(0);
+      const index = novasFotos.indexOf(photo);
+      novasFotos.splice(index, 1);
+      this.photos = novasFotos;
+    }, console.error);
   }
 }

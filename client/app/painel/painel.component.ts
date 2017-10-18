@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from "@angular/core";
   moduleId: module.id,
   selector: "painel",
   template: `
-    <div class="panel panel-default">
+    <div class="panel panel-default efeito">
         <div class="panel-heading">
             <h3 class="panel-title text-center">
             {{ titulo }}
@@ -14,7 +14,14 @@ import { Component, Input, OnInit } from "@angular/core";
             <ng-content></ng-content>
         </div>
     </div>
-    `
+    `,
+    styles: [
+        `
+        .efeito {
+            box-shadow: 2px 2px 15px;
+        }
+        `
+    ]
 })
 export class PainelComponent implements OnInit {
   @Input() titulo: string;
