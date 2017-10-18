@@ -1,14 +1,19 @@
-import { FormBuilder, FormGroup, Validator, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validator, Validators } from "@angular/forms";
 import { Component, OnInit } from "@angular/core";
 import { Photo } from "../photo/Photo";
 import { PhotoService } from "../photo/photo.service";
+import { ActivatedRoute } from "@angular/router";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "cadastro",
   template: `
     <div class="container">
     <h1 class="text-center">{{photo.titulo}}</h1>
-        <form [formGroup]="meuForm" class="row" (submit)="cadastrar($event)">
+        <p *ngIf="message.length" class="alert alert-info">
+            {{message}}
+        </p>    
+        <form [formGroup]="meuForm" class="row" (submit)="send($event)">
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Título</label>
@@ -67,17 +72,42 @@ import { PhotoService } from "../photo/photo.service";
 export class CadastroComponent implements OnInit {
   photo: Photo;
   meuForm: FormGroup;
+  route: ActivatedRoute;
+  send: any;
+  message: string = '';
 
-  constructor(private photoService: PhotoService, fb: FormBuilder) {
+  constructor(
+    private photoService: PhotoService,
+    private location: Location,
+    fb: FormBuilder,
+    route: ActivatedRoute
+  ) {
+    this.route = route;
+
+    this.route.params.subscribe(params => {
+      let id = params["id"];
+      if (id) {
+        this.photoService.getPhoto(id).subscribe(photo => (this.photo = photo));
+      }
+    });
+
     this.meuForm = fb.group({
-      titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      url: ['', Validators.required],
-      descricao: ['']
+      titulo: [
+        "",
+        Validators.compose([Validators.required, Validators.minLength(4)])
+      ],
+      url: ["", Validators.required],
+      descricao: [""]
     });
   }
 
   ngOnInit(): void {
-    this.photo = new Photo();
+      this.photo = new Photo();
+    if (this.route.params) {
+      this.send = this.alterar;
+    } else {
+      this.send = this.cadastrar;
+    }
   }
 
   cadastrar(event) {
@@ -85,5 +115,16 @@ export class CadastroComponent implements OnInit {
     this.photoService.create(this.photo).subscribe(id => {
       this.photo = new Photo();
     }, console.error);
+  }
+
+  alterar(event) {
+    event.preventDefault();
+    this.photoService.update(this.photo).subscribe(() => {
+      this.goBack();
+    }, console.error);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

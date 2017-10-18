@@ -12,6 +12,9 @@ import { Photo } from "../photo/photo";
         </h1>
     </div>
     <div class="container">
+        <p *ngIf="message.length" class="alert alert-info">
+            {{message}}
+        </p>
         <div class="row">
             <div class="col-md-12">
                 <form>
@@ -28,7 +31,9 @@ import { Photo } from "../photo/photo";
         <br>
         <div class="row">
             <painel *ngFor="let photo of photos | filtroPorTitulo: textoProcurado.value" titulo="{{photo.titulo | uppercase}}" class="col-md-2">
+            <a [routerLink]="['/cadastro', photo._id]">
                 <photo url="{{photo.url}}" titulo="{{photo.titulo}}"></photo>
+            </a>    
                 <button class="btn btn-danger btn-block" (click)="remove(photo)">Remover</button>
             </painel>
         </div>
@@ -37,6 +42,7 @@ import { Photo } from "../photo/photo";
 })
 export class ListagemComponent implements OnInit {
   photos: Photo[] = [];
+  message: string = '';
 
   constructor(private photoService: PhotoService) {}
 
@@ -50,6 +56,9 @@ export class ListagemComponent implements OnInit {
       const index = novasFotos.indexOf(photo);
       novasFotos.splice(index, 1);
       this.photos = novasFotos;
-    }, console.error);
+      this.message = 'Foto removida com sucesso';
+    }, (error) => {
+        this.message = 'Foto removida com sucesso';
+    });
   }
 }

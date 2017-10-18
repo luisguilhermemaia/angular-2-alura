@@ -15,7 +15,7 @@ export class PhotoService {
     return this.http.get(this.url).map((res: Response) => res.json());
   }
 
-  getPhoto(id: number): Observable<Photo> {
+  getPhoto(id: string): Observable<Photo> {
     const url = `${this.url}/${id}`;
 
     return this.http.get(url).map((res: Response) => res.json());
@@ -29,7 +29,7 @@ export class PhotoService {
 
   update(photo: Photo): Observable<Response> {
     const url = `${this.url}/${photo._id}`;
-    return this.http.put(url, photo, {headers: this.headers}).map((res: Response) => res.json());
+    return this.http.put(url, photo, {headers: this.headers});
   }
 
   delete(id: string): Observable<Response> {
