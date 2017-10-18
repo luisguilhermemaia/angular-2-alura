@@ -21,6 +21,8 @@ export class PhotoService {
   }
 
   create(photo: Photo) {
-    return this.http.post(this.url, photo).map((res: Response) => res.json());
+    return this.http
+      .post(this.url, photo, { headers: this.headers })
+      .map((res: Response) => res.json());
   }
 }

@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-    moduleId: module.id,
-    selector: 'painel',
-    template: `
+  moduleId: module.id,
+  selector: "painel",
+  template: `
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title text-center">
@@ -14,8 +14,13 @@ import { Component, Input } from '@angular/core';
             <ng-content></ng-content>
         </div>
     </div>
-    `,
+    `
 })
-export class PainelComponent {
-    @Input() titulo: string;
+export class PainelComponent implements OnInit {
+  @Input() titulo: string;
+
+  ngOnInit(): void {
+    this.titulo =
+      this.titulo.length > 7 ? this.titulo.substr(0, 7) + "..." : this.titulo;
+  }
 }
