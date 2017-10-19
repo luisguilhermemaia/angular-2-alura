@@ -4,6 +4,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HttpModule } from "@angular/http";
 import { AppComponent } from "./app.component";
 
+
 import { PhotoModule } from "./photo/photo.module";
 import { PainelModule } from "./painel/painel.module";
 
@@ -12,6 +13,7 @@ import { ListagemComponent } from "./listagem/listagem.component";
 import { CadastroComponent } from "./cadastro/cadastro.component";
 import { routing } from "./app.routes";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ModalModule } from './modal/modal.module';
 
 @NgModule({
   imports: [
@@ -22,7 +24,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     PainelModule,
     routing,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule
   ],
   declarations: [AppComponent, CadastroComponent, ListagemComponent],
   bootstrap: [AppComponent]

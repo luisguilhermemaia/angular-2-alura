@@ -110,7 +110,7 @@ export class CadastroComponent implements OnInit {
 
   send(event) {
     event.preventDefault();
-    this.photoService.cadastrar(this.photo).subscribe(res => {
+    return this.photoService.cadastrar(this.photo).subscribe(res => {
       this.message = res.mensagem;
       console.log(this.message);
       this.photo = new Photo();

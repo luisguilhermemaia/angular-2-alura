@@ -1,3 +1,4 @@
+import { PainelComponent } from './../painel/painel.component';
 import { Component, OnInit } from "@angular/core";
 import { PhotoService } from "../photo/photo.service";
 import { Photo } from "../photo/photo";
@@ -30,16 +31,12 @@ import { Photo } from "../photo/photo";
         </div>
         <br>
         <div class="row">
-            <painel *ngFor="let photo of photos | filtroPorTitulo: textoProcurado.value" titulo="{{photo.titulo | uppercase}}" class="col-md-2">
+            <painel #painel *ngFor="let photo of photos | filtroPorTitulo: textoProcurado.value" titulo="{{photo.titulo | uppercase}}" class="col-md-2">
             <a [routerLink]="['/cadastro', photo._id]">
                 <photo url="{{photo.url}}" titulo="{{photo.titulo}}"></photo>
             </a>   
-                <botao 
-                    confirmacao="true"
-                    nome="Remover" 
-                    estilo="btn-danger btn-block" 
-                    (acao)="remove(photo)">
-                </botao> 
+            <botao nome="Remover" estilo="btn-danger btn-block" (acao)="modal.show()" [confirmacao]="false"></botao>
+            <modal #modal frase="Tem certeza que deseja remover esta foto?" (confirma)="remove(photo, painel)"></modal>
             </painel>
         </div>
     </div>
@@ -55,13 +52,15 @@ export class ListagemComponent implements OnInit {
     this.photoService.getPhotos().subscribe(data => (this.photos = data));
   }
 
-  remove(photo: Photo) {
-    this.photoService.delete(photo._id).subscribe((res) => {
-      let novasFotos = this.photos.slice(0);
-      const index = novasFotos.indexOf(photo);
-      novasFotos.splice(index, 1);
-      this.photos = novasFotos;
-      this.message = res.mensagem;
+  remove(photo: Photo, painel: PainelComponent) {
+    return this.photoService.delete(photo._id).subscribe((res) => {
+        painel.fadeOut(() => {
+            let novasFotos = this.photos.slice(0);
+            const index = novasFotos.indexOf(photo);
+            novasFotos.splice(index, 1);
+            this.photos = novasFotos;
+            this.message = res.mensagem;
+        })
     }, (error) => {
         this.message = 'Foto removida com sucesso';
     });
