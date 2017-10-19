@@ -56,9 +56,13 @@ import { Location } from "@angular/common";
                         autocomplete="off">
                     </textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" [disabled]="meuForm.invalid">
-                    Salvar
-                </button>
+                <botao 
+                    nome="Salvar"
+                    estilo="btn-primary"
+                    tipo="submit"
+                    [desabilitado]="meuForm.invalid" 
+                    >
+                </botao>
                 <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
                 <hr>
             </div>
@@ -73,8 +77,7 @@ export class CadastroComponent implements OnInit {
   photo: Photo;
   meuForm: FormGroup;
   route: ActivatedRoute;
-  send: any;
-  message: string = '';
+  message: string = "";
 
   constructor(
     private photoService: PhotoService,
@@ -102,25 +105,15 @@ export class CadastroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.photo = new Photo();
-    if (this.route.params) {
-      this.send = this.alterar;
-    } else {
-      this.send = this.cadastrar;
-    }
+    this.photo = new Photo();
   }
 
-  cadastrar(event) {
+  send(event) {
     event.preventDefault();
-    this.photoService.create(this.photo).subscribe(id => {
+    this.photoService.cadastrar(this.photo).subscribe(res => {
+      this.message = res.mensagem;
+      console.log(this.message);
       this.photo = new Photo();
-    }, console.error);
-  }
-
-  alterar(event) {
-    event.preventDefault();
-    this.photoService.update(this.photo).subscribe(() => {
-      this.goBack();
     }, console.error);
   }
 
